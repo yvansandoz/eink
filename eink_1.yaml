@@ -70,7 +70,7 @@ sensor:
 
   - platform: adc
     pin: GPIO35
-    id: "bat"
+    id: "bat_v"
     name: "eInk 1 Battery Voltage"
     update_interval: 120s
     attenuation: 6db
@@ -82,12 +82,13 @@ sensor:
           send_every: 15
 
   - platform: template
+    id: "bat_per"
     name: "eInk 1 Battery Percentage"
     unit_of_measurement: '%'
     update_interval: 120s
     accuracy_decimals: 0
     lambda: |-
-      return ((id(bat).state-3) /1.2 * 100.00);
+      return ((id(bat_v).state-3) /1.2 * 100.00);
 
   - platform: homeassistant
     name: "Temp Etage"
@@ -223,11 +224,9 @@ display:
       int label_level_y = label_height-label_level_height-2;
       int label_level_min = 1;  int label_level_max = 1;
       
-      // Print header, title and version
-      it.print(0, 4, id(font2), TextAlign::TOP_LEFT, "HA Dashboard");
-      it.print(250, 4, id(font1), TextAlign::TOP_RIGHT, "Chambre Parents");
-
-
+      // Print header
+      it.print(0, 4, id(font2), TextAlign::TOP_LEFT, "eInk HA Dashboard 1");
+      it.printf(250, 4, id(font1), TextAlign::TOP_RIGHT, "%.2fV %.0f%%", id(bat_v).state, id(bat_per).state);
 
       // Print temperature Etage
       label_xidx = 1;      label_yidx = 1;
@@ -367,4 +366,4 @@ display:
 
       // Print footer, WIFI SSID, signal, adrs ip, date, time
       it.printf(0, 131, id(font1), TextAlign::BOTTOM_LEFT, "%s %.0f dB %s", id(wifi_ssid).state.c_str(), id(wifi_power).state, id(wifi_ip).state.c_str() );
-      it.strftime(250, 131, id(font1), TextAlign::BOTTOM_RIGHT, "%d-%m-%y %H:%M:%S", id(sntp_time).now());
+      it.strftime(250, 131, id(font1), TextAlign::BOTTOM_RIGHT, "%d.%m.%y %H:%M:%S", id(sntp_time).now());
