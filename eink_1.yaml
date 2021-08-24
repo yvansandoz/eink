@@ -1,8 +1,7 @@
 #------------------------------
 #-- eink_1.yaml
 #-- Affiche un mini dashboard sur un mini display e-ink 
-#-- L'écran est découpé en 5x3 zones où l'on peut afficher l'état d'un paramètre et un mini level meter
-#-- zf210517.1854
+#-- L'écran est découpé en 4x3 zones où l'on peut afficher l'état d'un paramètre et un mini level meter
 #--
 
 # sources: 
@@ -28,9 +27,7 @@ wifi:
   - password: !secret SSID_pwd
   - ssid: !secret SSID_iPhoneYvan
   - password: !secret SSID_pwd_iPhoneYvan
-# fast_connect: on
 
-# Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "FB Hotspot"
     password: !secret FB_pwd
@@ -38,27 +35,23 @@ wifi:
 captive_portal:
 esp32_ble_tracker:
 
-# Enable logging
 logger:
 #    level: VERBOSE
 
-# Enable Home Assistant API
 api:
   password: !secret api_pwd
 
 ota:
   password: !secret ota_pwd
 
-# Serveur Web
 web_server:
   port: 80
 
-# Serveur date et heure
 time:
   - platform: sntp
     id: sntp_time
 
-# Définition des sensors numériques
+# Définition des senseurs numériques
 sensor:
   - platform: wifi_signal
     name: "eInk 1 Signal Wi-Fi"
@@ -130,7 +123,7 @@ sensor:
     entity_id: sensor.yverdon_les_bains_wind_speed
     id: wind_ext
 
-# Définitions des texts sensors
+# Définitions des senseurs textes
 text_sensor:
   - platform: wifi_info
     ip_address:
@@ -163,7 +156,6 @@ binary_sensor:
     on_press:
       - component.update: z_eink
 
-
 # Presence based on BLE Service UUID
   - platform: ble_presence
     service_uuid: '00001525-9F03-0DE5-96C5-B8F4F3081186'
@@ -175,7 +167,6 @@ switch:
     name: "Switch eInk Refresh"
     turn_on_action:
       - component.update: z_eink
-
     
 # Définition des polices de caractères
 font:
@@ -190,9 +181,6 @@ font:
   - file: "Ldfcomicsans-jj7l.ttf"
     id: font_cs
     size: 20
-#  - file: "arial_th.ttf"
-#    id: font_arth
-#    size: 16
 
 # Définition du display e-link
 spi:
@@ -202,7 +190,7 @@ spi:
 display:
 #   model: 2.90inv2    #c'est ceci qui marche avec mon e-link TTGO T5 V2.3.1 _ 2.13 zf210505.0002
 #   https://github.com/lewisxhe/GxEPD/blob/master/src/GxDEPG0213BN/GxDEPG0213BN.h
-#   J'ai comme résolution utilisable: 250x122 !   note: 128*250, the visible number of display pixels is 122*250, see GDEH0213B72 V1.1 Specification.pdf
+#   Résolution utilisable: 250x122 !   note: 128*250, the visible number of display pixels is 122*250, see GDEH0213B72 V1.1 Specification.pdf
   - platform: waveshare_epaper
     cs_pin: 5
     dc_pin: 17
