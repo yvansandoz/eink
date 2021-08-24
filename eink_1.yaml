@@ -71,7 +71,7 @@ sensor:
   - platform: adc
     pin: GPIO35
     id: "bat"
-    name: "eInk 1 Battery"
+    name: "eInk 1 Battery Voltage"
     update_interval: 120s
     attenuation: 6db
     unit_of_measurement: "V"
@@ -80,14 +80,6 @@ sensor:
       - sliding_window_moving_average:
           window_size: 15
           send_every: 15
-
-  - platform: template
-    name: "eInk 1 Battery Voltage"
-    unit_of_measurement: 'V'
-    update_interval: 120s
-    accuracy_decimals: 2
-    lambda: |-
-      return (id(bat).state);
 
   - platform: template
     name: "eInk 1 Battery Percentage"
