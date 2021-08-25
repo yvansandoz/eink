@@ -204,154 +204,157 @@ display:
 
 #   http://www.linux-france.org/prj/embedded/sdcc/sdcc_course.formatted_io.html, pour se souvenir le formatage de printf ;-)
     lambda: |-
+      int label_swidth = 250;   int label_sheight = 131; //TTGO T5 GDEM0213B74 (250 x 122)
+      int label_col = 5;        int label_row = 3; //Numbers of columns and rows
       int label_x0 = 0;         int label_y0 = 25;
-      int label_with = 62;      int label_height = 30;
+      int label_cwidth = label_swidth/label_col; //Calculation for the cell width   
+      int label_cheight = (label_sheight-40)/label_row; //Calculation for the cell width 
       int label_xidx = 1;       int label_yidx = 1;
       
       int label_level = 1;      int label_level_height = 5;
-      int label_level_y = label_height-label_level_height-2;
+      int label_level_y = label_cheight-label_level_height-2;
       int label_level_min = 1;  int label_level_max = 1;
       
       // Print header
       it.print(0, 4, id(font2), TextAlign::TOP_LEFT, "eInk HA Dashboard 1");
-      it.printf(250, 4, id(font1), TextAlign::TOP_RIGHT, "%.2fV %.0f%%", id(bat_v).state, id(bat_per).state);
+      it.printf(label_swidth, 4, id(font1), TextAlign::TOP_RIGHT, "%.2fV %.0f%%", id(bat_v).state, id(bat_per).state);
 
       // Print temperature Etage
       label_xidx = 1;      label_yidx = 1;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Temp Etage");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_etage).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "T Etage");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_etage).state);
       
       label_level_min = 0;   label_level_max = 50;
-      label_level = label_with * ((id(temp_etage).state-label_level_min)/(label_level_max-label_level_min));
+      label_level = label_cwidth * ((id(temp_etage).state-label_level_min)/(label_level_max-label_level_min));
       if (id(temp_etage).has_state()) {
-        it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+        it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
       }      
       
       
       // Print humidity Etage
       label_xidx = 1;      label_yidx = 2;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Hum Etage");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_etage).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "H Etage");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_etage).state);
 
-      label_level = label_with * 0.66;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.66;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
       // Print battery Etage
       label_xidx = 1;      label_yidx = 3;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Bat Etage");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_etage).state.c_str());
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "B Etage");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_etage).state.c_str());
 
-      label_level = label_with * 0.99;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.99;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
 
       // Print temperature Rez
       label_xidx = 2;      label_yidx = 1;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Temp Rez");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_rez).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "T Rez");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_rez).state);
       
       label_level_min = 0;   label_level_max = 50;
-      label_level = label_with * ((id(temp_rez).state-label_level_min)/(label_level_max-label_level_min));
+      label_level = label_cwidth * ((id(temp_rez).state-label_level_min)/(label_level_max-label_level_min));
       if (id(temp_rez).has_state()) {
-        it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+        it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
       }      
       
       
       // Print humidity Rez
       label_xidx = 2;      label_yidx = 2;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Hum Rez");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_rez).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "H Rez");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_rez).state);
 
-      label_level = label_with * 0.66;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.66;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
       // Print battery Rez
       label_xidx = 2;      label_yidx = 3;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Bat Rez");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_rez).state.c_str());
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "B Rez");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_rez).state.c_str());
 
-      label_level = label_with * 0.99;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.99;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
 
       // Print temperature SS
       label_xidx = 3;      label_yidx = 1;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Temp SS");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_ss).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "T SS");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_ss).state);
       
       label_level_min = 0;   label_level_max = 50;
-      label_level = label_with * ((id(temp_ss).state-label_level_min)/(label_level_max-label_level_min));
+      label_level = label_cwidth * ((id(temp_ss).state-label_level_min)/(label_level_max-label_level_min));
       if (id(temp_ss).has_state()) {
-        it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+        it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
       }      
       
       
       // Print humidity SS
       label_xidx = 3;      label_yidx = 2;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Hum SS");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_ss).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "H SS");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_ss).state);
 
-      label_level = label_with * 0.66;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.66;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
       // Print battery SS
       label_xidx = 3;      label_yidx = 3;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Bat SS");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_ss).state.c_str());
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "B SS");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%s", id(bat_ss).state.c_str());
 
-      label_level = label_with * 0.99;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.99;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
 
       // Print temperature Ext
       label_xidx = 4;      label_yidx = 1;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Temp Ext");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_ext).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "T Ext");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.1f°C", id(temp_ext).state);
       
       label_level_min = 0;   label_level_max = 50;
-      label_level = label_with * ((id(temp_ext).state-label_level_min)/(label_level_max-label_level_min));
+      label_level = label_cwidth * ((id(temp_ext).state-label_level_min)/(label_level_max-label_level_min));
       if (id(temp_ext).has_state()) {
-        it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+        it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
       }      
       
       
       // Print humidity Ext
       label_xidx = 4;      label_yidx = 2;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Hum Ext");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_ext).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "H Ext");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.0f%%", id(hum_ext).state);
 
-      label_level = label_with * 0.66;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.66;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
       // Print wind Ext
       label_xidx = 4;      label_yidx = 3;
-      it.rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height, label_with-1, label_height-1, COLOR_ON);
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height, id(font1), TextAlign::TOP_CENTER, "Wind Ext");
-      it.printf(label_x0+(label_xidx-1)*label_with+label_with/2, label_y0+(label_yidx-1)*label_height+10, id(font1), TextAlign::TOP_CENTER , "%.1fkm/h", id(wind_ext).state);
+      it.rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight, label_cwidth-1, label_cheight-1, COLOR_ON);
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight, id(font1), TextAlign::TOP_CENTER, "V Ext");
+      it.printf(label_x0+(label_xidx-1)*label_cwidth+label_cwidth/2, label_y0+(label_yidx-1)*label_cheight+10, id(font1), TextAlign::TOP_CENTER , "%.1fkm/h", id(wind_ext).state);
 
-      label_level = label_with * 0.66;
-      it.filled_rectangle(label_x0+(label_xidx-1)*label_with, label_y0+(label_yidx-1)*label_height+label_level_y, label_level, label_level_height);
+      label_level = label_cwidth * 0.66;
+      it.filled_rectangle(label_x0+(label_xidx-1)*label_cwidth, label_y0+(label_yidx-1)*label_cheight+label_level_y, label_level, label_level_height);
 
 
 
       // Print footer, WIFI SSID, signal, adrs ip, date, time
-      it.printf(0, 131, id(font1), TextAlign::BOTTOM_LEFT, "%s %.0f dB %s", id(wifi_ssid).state.c_str(), id(wifi_power).state, id(wifi_ip).state.c_str() );
-      it.strftime(250, 131, id(font1), TextAlign::BOTTOM_RIGHT, "%d.%m.%y %H:%M:%S", id(sntp_time).now());
+      it.printf(0, label_sheight, id(font1), TextAlign::BOTTOM_LEFT, "%s %.0f dB %s", id(wifi_ssid).state.c_str(), id(wifi_power).state, id(wifi_ip).state.c_str() );
+      it.strftime(label_swidth, label_sheight, id(font1), TextAlign::BOTTOM_RIGHT, "%d.%m.%y %H:%M:%S", id(sntp_time).now());
