@@ -208,7 +208,7 @@ display:
       int label_col = 5;        int label_row = 3; //Numbers of columns and rows
       int label_x0 = 0;         int label_y0 = 25;
       int label_cwidth = label_swidth/label_col; //Calculation for the cell width   
-      int label_cheight = (label_sheight-35)/label_row; //Calculation for the cell width 
+      int label_cheight = (label_sheight-40)/label_row; //Calculation for the cell width 
       int label_xidx = 1;       int label_yidx = 1;
       
       int label_level = 1;      int label_level_height = 5;
